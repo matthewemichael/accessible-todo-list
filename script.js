@@ -12,6 +12,24 @@ to_do_form.addEventListener('submit', function(event) {
     screenReaderFeedback(task);
 });
 
+list.addEventListener('click', function(event) {
+    if (hasClassName(event.target, 'delete_task')) {
+        const li = event.target.closest('li');
+        const taskName = event.target.previousElementSibling.textContent;
+        deleteTask(li);
+        moveFocus(todo); // After list item is deleted focus is on text input box //
+        screenReaderFeedback(taskName, 'removed');
+    }
+});
+
+function deleteTask(theTarget) {
+    list.removeChild(theTarget);
+}
+
+function moveFocus(element) {
+    element.focus();
+}
+
 function addTaskToDOM(task) {
   let newID = generateID();
   let taskItem = createElement('li', '', list, ['class', 'task']);
@@ -50,4 +68,11 @@ function generateID() {
         return `${idPrefix}0`;
     }
     return idPrefix + tasks.length;
+}
+
+function hasClassName(element, className) {
+    if (element.classList.contains(className)) {
+        return true;
+    }
+    return false;
 }
